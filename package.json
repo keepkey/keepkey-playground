@@ -1,0 +1,8 @@
+{
+  "name": "keepkey-playground",
+  "version": "1.0.0",
+  "dependencies": {
+    "@keepkey/keepkey-sdk": "^0.3.1",
+    "node-fetch": "^3.3.0"
+  }
+}
