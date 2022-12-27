@@ -9,7 +9,7 @@ import {
 import Modal from 'react-modal';
 import styled from 'styled-components';
 
-import { getKeepKeySDK } from '@keepkey/keepkey-sdk'
+import { KeepKeySdk } from '@keepkey/keepkey-sdk'
 const xrpl = require("xrpl")
 
 function App() {
@@ -90,14 +90,19 @@ function App() {
   let onStart = async function(){
     try{
       console.log("checkpoint1")
-
+      let spec = 'http://localhost:1646/spec/swagger.json'
+      let apiKey = localStorage.getItem("apiKey");
       let config = {
-        serviceKey: process.env['SERVICE_KEY'] || 'abc-123',
-        serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-        serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+        apiKey: apiKey || 'test-123',
+        pairingInfo:{
+          name: process.env['SERVICE_NAME'] || 'Ripple',
+          imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://ripple.com/static/035fab903a624d156d1ee1c3f2abfe9d/6d42f/xrp-logo.png',
+          basePath:spec
+        }
       }
       //init
-      sdk = await getKeepKeySDK(config)
+      let sdk = await KeepKeySdk.create(config)
+      console.log("config: ",config.apiKey)
       console.log("checkpoint2")
 
       //Unsigned TX
@@ -109,10 +114,8 @@ function App() {
       }
 
       // //push tx to api
-      // // console.log(kk.instance.SignTransaction())
-      let address = await sdk.wallet.rippleGetAddress({rippleGetAddress: addressInfo})
-      address = address.replace('"','')
-      address = address.replace('"','')
+      let address = await sdk.address.xrpGetAddress({address_n: addressInfo.addressNList})
+      address = address.address
       console.log("address: ", address)
       setAddress(address)
 
@@ -157,19 +160,29 @@ function App() {
       console.log("address: ",toAddress)
 
       setAmount( parseFloat(amount) * 1000000)
-      //TODO this is lame, dont do this
+
+      let apiKey = localStorage.getItem("apiKey");
+      let spec = 'http://localhost:1646/spec/swagger.json'
       let config = {
-        serviceKey: process.env['SERVICE_KEY'] || 'abc-123',
-        serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-        serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+        apiKey: apiKey || 'test-123',
+        pairingInfo:{
+          name: process.env['SERVICE_NAME'] || 'Ripple',
+          imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://ripple.com/static/035fab903a624d156d1ee1c3f2abfe9d/6d42f/xrp-logo.png',
+          basePath:spec
+        }
       }
       //init
-      sdk = await getKeepKeySDK(config)
+      let sdk = await KeepKeySdk.create(config)
+      console.log("config: ",config.apiKey)
       console.log("checkpoint2")
       //
       // if (balance > 10) {
       setToAddress(toAddress)
+      // let fromAddress = address
+
+      // let toAddress = "rU6ByS8KEgTdVEtV1P8RSMxUxP26THqkye"
       let fromAddress = address
+      // let amount = "1000"
 
       let tx = {
         "type": "auth/StdTx",
@@ -190,7 +203,7 @@ function App() {
               "value": {
                 "amount": [
                   {
-                    "amount": parseFloat(amount) * 1000000,
+                    "amount": amount.toString(),
                     "denom": "drop"
                   }
                 ],
@@ -207,35 +220,14 @@ function App() {
       let unsignedTx = {
         "network": "XRP",
         "asset": "XRP",
-        "transaction": {
-          "context": "0x33b35c665496bA8E71B22373843376740401F106.wallet",
-          "type": "transfer",
-          "addressFrom": fromAddress,
-          "recipient": toAddress,
-          "asset": "XRP",
-          "network": "XRP",
-          "memo": "",
-          "amount": parseFloat(amount) * 1000000,
-          "fee": {
-            "priority": 5
-          },
-          "noBroadcast": true
-        },
         "HDwalletPayload": {
-          "addressNList": [ 2147483692, 2147483792, 2147483648, 0, 0 ],
-          // "addressNList": [
-          //   2147483692,
-          //   2147483708,
-          //   2147483648,
-          //   0,
-          //   0
-          // ],
-          tx: tx,
+          addressNList: [ 2147483692, 2147483792, 2147483648, 0, 0 ],
+          tx:tx,
           flags: undefined,
-          sequence,
-          lastLedgerSequence: ledgerIndexCurrent + 1000000000,
+          sequence: sequence.toString(),
+          lastLedgerSequence: (ledgerIndexCurrent + 1000000000).toString(),
           payment: {
-            amount:parseFloat(amount) * 1000000,
+            amount: amount.toString(),
             destination: toAddress,
             destinationTag: "1234567890",
           },
@@ -244,14 +236,15 @@ function App() {
       }
 
       //push tx to api
-      console.log("unsignedTx: ", unsignedTx)
-      let responseSign = await sdk.sign.signTransaction({body: {data: {invocation: {unsignedTx}}}})
+      console.log("unsignedTx: ", JSON.stringify(unsignedTx.HDwalletPayload))
+      let responseSign = await sdk.xrp.xrpSignTransaction(unsignedTx.HDwalletPayload)
+      responseSign = JSON.parse(responseSign)
       console.log("responseSign: ", responseSign)
-      console.log("responseSign: ", responseSign.signedTx.value)
-      console.log("responseSign: ", responseSign.signedTx.value.signatures)
-      console.log("responseSign: ", responseSign.signedTx.value.signatures[0].serializedTx)
+      console.log("responseSign: ", responseSign.value)
+      console.log("responseSign: ", responseSign.value.signatures)
+      console.log("responseSign: ", responseSign.value.signatures[0].serializedTx)
       //broadcast
-      let serialized = responseSign.signedTx.value.signatures[0].serializedTx
+      let serialized = responseSign.value.signatures[0].serializedTx
       //
       console.log("serialized: ", serialized)
       setSignedTx(serialized)

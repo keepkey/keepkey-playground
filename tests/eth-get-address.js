@@ -8,16 +8,18 @@ let run_test = async function () {
     try {
         let config = {
             apiKey: process.env['SERVICE_KEY'] || 'test-123',
-            serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-            serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
-            spec
+            pairingInfo:{
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+                basePath:spec
+            }
         }
         //init
         // console.log(SDK)
         // SDK.addMiddleware((req, res, next) => next())
 
         const sdk = await SDK.KeepKeySdk.create(config)
-        // console.log(sdk)
+        console.log(config.apiKey)
 
         // console.log(sdk.eth)
         // console.log(sdk.address)

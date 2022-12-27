@@ -1,17 +1,19 @@
-const { getKeepKeySDK } = require("../lib")
+const { KeepKeySdk } = require("@keepkey/keepkey-sdk")
 
 let spec = 'http://localhost:1646/spec/swagger.json'
 
 let run_test = async function () {
     try {
         let config = {
-            serviceKey: process.env['SERVICE_KEY'] || 'abc-123',
-            serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-            serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
-            spec
+            apiKey: process.env['SERVICE_KEY'] || 'test-123',
+            pairingInfo:{
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+                basePath:spec
+            }
         }
         //init
-        const sdk = await getKeepKeySDK(config)
+        const sdk = await KeepKeySdk.create(config)
 
         let toAddress = "rU6ByS8KEgTdVEtV1P8RSMxUxP26THqkye"
         let fromAddress = "rU6ByS8KEgTdVEtV1P8RSMxUxP26THqkye"
@@ -89,14 +91,21 @@ let run_test = async function () {
         }
 
         //push tx to api
-        // console.log(kk.instance.SignTransaction())
-        let responseSign = await sdk.sign.signTransaction({ body: { data: { invocation: { unsignedTx } } } })
+        console.log("unsignedTx: ", JSON.stringify(unsignedTx.HDwalletPayload))
+        let responseSign = await sdk.xrp.xrpSignTransaction(unsignedTx.HDwalletPayload)
         console.log("responseSign: ", responseSign.data)
-        console.log("responseSign: ", responseSign.data.signedTx)
-        console.log("responseSign: ", JSON.stringify(responseSign.data.signedTx))
+        // console.log("responseSign: ", responseSign.data.signedTx)
+        console.log("responseSign: ", JSON.stringify(responseSign))
 
     } catch (e) {
         console.error(e)
+        console.log("e: ", Object.keys(e))
+        console.log("e: ", e.response)
+        console.log("e: ", Object.keys(e.name.toString()))
+        console.log("e: ", Object.keys(e.response.toString()))
+        // console.log("e: ", e.response)
+
+        console.log("e: ", e.response.toString())
     }
 }
 

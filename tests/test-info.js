@@ -1,5 +1,5 @@
 require("dotenv").config({path:'../../../../.env'})
-let kkApi = require("../lib")
+let kkApi = require("@keepkey/keepkey-sdk")
 
 let spec = 'http://localhost:1646/spec/swagger.json'
 

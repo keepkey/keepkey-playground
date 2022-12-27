@@ -4,14 +4,21 @@ let spec = 'http://localhost:1646/spec/swagger.json'
 
 let run_test = async function () {
     try {
+        //apiKey
+
         let config = {
-            apiKey: process.env['SERVICE_KEY'] || 'test',
-            serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-            serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+            apiKey: process.env['SERVICE_KEY'] || 'test-123',
+            pairingInfo:{
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+                basePath:spec
+            }
         }
         //init
         let sdk = await SDK.KeepKeySdk.create(config)
-
+        console.log(config)
+        //get api key
+        //if apiKey !== sdk.apiKey save
 
         //Unsigned TX
         let addressInfo = {
