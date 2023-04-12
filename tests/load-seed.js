@@ -1,15 +1,17 @@
 
-const { getKeepKeySDK } = require("../lib")
+const { getKeepKeySDK } = require("@keepkey/keepkey-sdk")
 require('dotenv').config({ path: './../.env' })
 let spec = 'http://localhost:1646/spec/swagger.json'
 
 let run_test = async function () {
     try {
         let config = {
-            serviceKey: process.env['SERVICE_KEY'] || 'abc-123',
-            serviceName: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
-            serviceImageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
-            spec
+            apiKey: process.env['SERVICE_KEY'] || 'test-123',
+            pairingInfo:{
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+                basePath:spec
+            }
         }
         //init
         const sdk = await getKeepKeySDK(config)

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@keepkey/keepkey-sdk": "^0.2.5",
+    "@keepkey/keepkey-sdk": "^0.2.6",
     "@pioneer-platform/pioneer-client": "^8.1.32",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

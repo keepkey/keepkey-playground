@@ -7,7 +7,7 @@ let run_test = async function () {
         let config = {
             apiKey: process.env['SERVICE_KEY'] || 'test-123',
             pairingInfo:{
-                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo Appaa',
                 imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
                 basePath:spec
             }
@@ -94,7 +94,7 @@ let run_test = async function () {
         console.log("unsignedTx: ", JSON.stringify(unsignedTx.HDwalletPayload))
         let responseSign = await sdk.xrp.xrpSignTransaction(unsignedTx.HDwalletPayload)
         console.log("responseSign: ", responseSign.data)
-        // console.log("responseSign: ", responseSign.data.signedTx)
+        console.log("responseSign: ", responseSign.data.signedTx)
         console.log("responseSign: ", JSON.stringify(responseSign))
 
     } catch (e) {

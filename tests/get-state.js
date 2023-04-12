@@ -15,8 +15,9 @@ let run_test = async function () {
             }
         }
         const sdk = await SDK.KeepKeySdk.create(config)
-        // console.log(sdk.)
-        let user = await sdk.system.info.getFeatures()
+        console.log(config.apiKey)
+
+        let user = await sdk.system.debug.getState()
         console.log(user.data)
     } catch (e) {
         console.error(e)
