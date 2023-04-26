@@ -24,13 +24,13 @@ let run_test = async function () {
         //Unsigned TX
         let addressInfo = {
             addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
+            coin: 'Osmosis',
+            scriptType: 'osmosis',
             showDisplay: false
         }
 
         //get address
-        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.osmosisGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
 
         //Unsigned TX
@@ -58,14 +58,15 @@ let run_test = async function () {
                         // "type":"cosmos-sdk/MsgSend"
 
                         //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        "type": "cosmos-sdk/MsgBeginRedelegate", //cosmos-sdk/MsgDelegate
                         "value": {
-                            "amount": [{
-                                "denom": "uatom",
+                            "amount": {
+                                "denom": "uosmo",
                                 "amount": "184775"
-                            }],
+                            },
                             "delegator_address": address,
-                            "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
+                            "validator_src_address": "osmovaloper1cyw4vw20el8e7ez8080md0r8psg25n0cq98a9n",
+                            "validator_dst_address": "osmovaloper1cyw4vw20el8e7ez8080md0r8psg25n0cq98a9n"
                         }
                     }
                 ],
@@ -73,7 +74,7 @@ let run_test = async function () {
                     "gas":"0",
                     "amount":[
                         {
-                            "denom":"uatom",
+                            "denom":"uosmo",
                             "amount":"1000"
                         }
                     ]
@@ -89,10 +90,8 @@ let run_test = async function () {
 
         let input = {
             signDoc: {
-                // "accountNumber":"574492",
-                // "chainId":"cosmoshub-4",
                 "account_number":"95421",
-                "chain_id":"cosmoshub-4",
+                "chain_id":"osmosis-1",
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
                 sequence: msg.sequence,
@@ -100,7 +99,7 @@ let run_test = async function () {
                     "amount": [
                         {
                             "amount": "2500",
-                            "denom": "uatom"
+                            "denom": "uosmo"
                         }
                     ],
                     "gas": "250000"
@@ -109,7 +108,8 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        // let responseSign = await sdk.cosmos.cosmosSignAmino(input)
+        let responseSign = await sdk.osmosis.osmoSignAminoRedelegate(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

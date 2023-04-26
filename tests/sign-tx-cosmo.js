@@ -18,28 +18,34 @@ let run_test = async function () {
         const sdk = await KeepKeySdk.create(config)
         console.log("newKey: ",config.apiKey)
 
+        // console.log(sdk.eth)
+        //Unsigned TX
+        let addressInfo = {
+            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
+            coin: 'Cosmos',
+            scriptType: 'cosmos',
+            showDisplay: false
+        }
+
+        //get address
+        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        console.log("address: ", address)
 
         //Unsigned TX
         let msg = {
-            "addressNList":[
-                2147483692,
-                2147483766,
-                2147483648,
-                0,
-                0
-            ],
+            "addressNList": [2147483692, 2147483708, 2147483648, 0, 0],
             "tx":{
                 "msg":[
                     {
                         "value":{
-                            "amount":[
+                            "amount":
                                 {
                                     "denom":"uatom",
                                     "amount":"1000"
                                 }
-                            ],
+                            ,
                             "to_address":"cosmos17htlvce5ys8hqhxlkatyuhv8qwtx72ayqnrcks",
-                            "from_address":"cosmos1yc6dftwdhgt96k8yty8djga88f3knhznfyh26k"
+                            "from_address":address
                         },
                         "type":"cosmos-sdk/MsgSend"
                     }
@@ -56,7 +62,7 @@ let run_test = async function () {
                 "memo":"1234"
             },
             "sequence":"8",
-            accountNumber:""
+            accountNumber:"574492"
         }
 
         let input = {
@@ -65,8 +71,6 @@ let run_test = async function () {
                 // "chainId":"cosmoshub-4",
                 "account_number":"574492",
                 "chain_id":"cosmoshub-4",
-                // TODO: busted openapi-generator types
-                // @ts-expect-error
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
                 sequence: msg.sequence,
@@ -75,13 +79,14 @@ let run_test = async function () {
                     amount: [],
                 },
             },
-            signerAddress: msg.tx.msg[0].value.from_address,
+            signerAddress: address,
         }
         console.log("input: ",input)
         let responseSign = await sdk.cosmos.cosmosSignAmino(input)
         console.log(responseSign)
     } catch (e) {
-        console.error(e)
+        console.error("error.response.body: ",e.response.body)
+        console.error("error.response.statusText: ",e.response.statusText)
     }
 }
 

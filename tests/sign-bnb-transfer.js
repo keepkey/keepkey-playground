@@ -24,13 +24,12 @@ let run_test = async function () {
         //Unsigned TX
         let addressInfo = {
             addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
+            coin: 'Binance',
+            scriptType: 'binance',
             showDisplay: false
         }
-
         //get address
-        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.binanceGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
 
         //Unsigned TX
@@ -45,28 +44,28 @@ let run_test = async function () {
             "tx":{
                 "msg":[
                     {
-                        // "value":{
-                        //     "amount":[
-                        //         {
-                        //             "denom":"uatom",
-                        //             "amount":"1000"
-                        //         }
-                        //     ],
-                        //     "to_address":"cosmos17htlvce5ys8hqhxlkatyuhv8qwtx72ayqnrcks",
-                        //     "from_address":address
-                        // },
-                        // "type":"cosmos-sdk/MsgSend"
-
-                        //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
-                        "value": {
-                            "amount": [{
-                                "denom": "uatom",
-                                "amount": "184775"
-                            }],
-                            "delegator_address": address,
-                            "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
-                        }
+                        "inputs": [
+                            {
+                                "address": "bnb1afwh46v6nn30nkmugw5swdmsyjmlxslgjfugre",
+                                "coins": [
+                                    {
+                                        "amount": 1000,
+                                        "denom": "BNB"
+                                    }
+                                ]
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "address": "bnb1v7wds8atg9pxss86vq5qjuz38wqsadq7e5m2rr",
+                                "coins": [
+                                    {
+                                        "amount": 1000,
+                                        "denom": "BNB"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
                 "fee":{
@@ -89,12 +88,11 @@ let run_test = async function () {
 
         let input = {
             signDoc: {
-                // "accountNumber":"574492",
-                // "chainId":"cosmoshub-4",
-                "account_number":"95421",
-                "chain_id":"cosmoshub-4",
+                "account_number": "471113",
+                "chain_id": "Binance-Chain-Tigris",
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
+                "source": "0",
                 sequence: msg.sequence,
                 fee: {
                     "amount": [
@@ -109,7 +107,7 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        let responseSign = await sdk.bnb.bnbSignTransaction(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

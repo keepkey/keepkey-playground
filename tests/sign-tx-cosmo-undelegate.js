@@ -58,12 +58,22 @@ let run_test = async function () {
                         // "type":"cosmos-sdk/MsgSend"
 
                         //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        // "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        // "value": {
+                        //     "amount": [{
+                        //         "denom": "uatom",
+                        //         "amount": "184775"
+                        //     }],
+                        //     "delegator_address": address,
+                        //     "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
+                        // }
+
+                        "type": "cosmos-sdk/MsgUndelegate", //cosmos-sdk/MsgDelegate
                         "value": {
-                            "amount": [{
+                            "amount": {
                                 "denom": "uatom",
                                 "amount": "184775"
-                            }],
+                            },
                             "delegator_address": address,
                             "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
                         }
@@ -109,7 +119,8 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        // let responseSign = await sdk.cosmos.cosmosSignAmino(input)
+        let responseSign = await sdk.cosmos.cosmosSignAminoUndelegate(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

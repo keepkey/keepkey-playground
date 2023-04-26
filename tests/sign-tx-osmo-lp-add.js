@@ -23,14 +23,14 @@ let run_test = async function () {
         // console.log(sdk.eth)
         //Unsigned TX
         let addressInfo = {
-            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
+            addressNList: [2147483692, 2147483766, 2147483648, 0, 0],
+            coin: 'Osmosis',
+            scriptType: 'osmosis',
             showDisplay: false
         }
 
         //get address
-        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.osmosisGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
 
         //Unsigned TX
@@ -45,27 +45,22 @@ let run_test = async function () {
             "tx":{
                 "msg":[
                     {
-                        // "value":{
-                        //     "amount":[
-                        //         {
-                        //             "denom":"uatom",
-                        //             "amount":"1000"
-                        //         }
-                        //     ],
-                        //     "to_address":"cosmos17htlvce5ys8hqhxlkatyuhv8qwtx72ayqnrcks",
-                        //     "from_address":address
-                        // },
-                        // "type":"cosmos-sdk/MsgSend"
-
-                        //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        //lp add
+                        "type": "osmosis/gamm/join-pool",
                         "value": {
-                            "amount": [{
-                                "denom": "uatom",
-                                "amount": "184775"
-                            }],
-                            "delegator_address": address,
-                            "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
+                            "pool_id": "1",
+                            "sender": address,
+                            "share_out_amount": "1006980521903380445",
+                            "token_in_maxs": [
+                                {
+                                    "amount": "10595",
+                                    "denom": "ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2"
+                                },
+                                {
+                                    "amount": "143474",
+                                    "denom": "uosmo"
+                                }
+                            ]
                         }
                     }
                 ],
@@ -89,8 +84,6 @@ let run_test = async function () {
 
         let input = {
             signDoc: {
-                // "accountNumber":"574492",
-                // "chainId":"cosmoshub-4",
                 "account_number":"95421",
                 "chain_id":"cosmoshub-4",
                 msgs: msg.tx.msg,
@@ -109,7 +102,7 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        let responseSign = await sdk.osmosis.osmoSignAminoLpAdd(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

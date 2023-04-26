@@ -23,14 +23,14 @@ let run_test = async function () {
         // console.log(sdk.eth)
         //Unsigned TX
         let addressInfo = {
-            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
+            addressNList: [2147483692, 2147483766, 2147483648, 0, 0],
+            coin: 'Osmosis',
+            scriptType: 'osmosis',
             showDisplay: false
         }
 
         //get address
-        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.osmosisGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
 
         //Unsigned TX
@@ -58,14 +58,10 @@ let run_test = async function () {
                         // "type":"cosmos-sdk/MsgSend"
 
                         //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        "type": "cosmos-sdk/MsgWithdrawDelegationReward", //cosmos-sdk/MsgDelegate
                         "value": {
-                            "amount": [{
-                                "denom": "uatom",
-                                "amount": "184775"
-                            }],
                             "delegator_address": address,
-                            "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
+                            "validator_address": "osmovaloper1cyw4vw20el8e7ez8080md0r8psg25n0cq98a9n"
                         }
                     }
                 ],
@@ -109,7 +105,8 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        // let responseSign = await sdk.cosmos.cosmosSignAmino(input)
+        let responseSign = await sdk.osmosis.osmoSignAminoWithdrawDelegatorRewardsAll(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

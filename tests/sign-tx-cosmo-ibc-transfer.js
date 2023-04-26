@@ -58,14 +58,21 @@ let run_test = async function () {
                         // "type":"cosmos-sdk/MsgSend"
 
                         //delegate
-                        "type": "cosmos-sdk/MsgDelegate", //cosmos-sdk/MsgDelegate
+                        "type": "cosmos-sdk/MsgTransfer", //cosmos-sdk/MsgDelegate
                         "value": {
-                            "amount": [{
+                            "token": {
                                 "denom": "uatom",
                                 "amount": "184775"
-                            }],
-                            "delegator_address": address,
-                            "validator_address": "cosmosvaloper1qwl879nx9t6kef4supyazayf7vjhennyh568ys"
+                            },
+                            "source_port":"transfer",
+                            "source_channel":"channel-141",
+                            "sender": address,
+                            "receiver": "osmo15cenya0tr7nm3tz2wn3h3zwkht2rxrq7g9ypmq",
+                            "timeout_height": {
+                                "revision_height": "9339851",
+                                "revision_number": "1"
+                            },
+                            "memo":"test"
                         }
                     }
                 ],
@@ -109,7 +116,8 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.cosmos.cosmosSignAminoDelegate(input)
+        // let responseSign = await sdk.cosmos.cosmosSignAmino(input)
+        let responseSign = await sdk.cosmos.cosmosSignAminoIbcTransfer(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)
