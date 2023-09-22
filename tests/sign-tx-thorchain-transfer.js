@@ -1,5 +1,5 @@
 
-const { KeepKeySdk } = require("@keepkey/keepkey-sdk")
+const { KeepKeySdk, SignDocTransfer  } = require("@keepkey/keepkey-sdk")
 
 let spec = 'http://localhost:1646/spec/swagger.json'
 
@@ -24,13 +24,36 @@ let run_test = async function () {
         //Unsigned TX
         let addressInfo = {
             addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Binance',
-            scriptType: 'binance',
+            coin: 'Cosmos',
+            scriptType: 'cosmos',
             showDisplay: false
         }
+
         //get address
-        let {address} = await sdk.address.binanceGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.thorchainGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
+        //msg
+
+        //
+        // let raw = {
+        //     "signDoc": {
+        //         "fee": {
+        //             "gas": "0",
+        //             "amount": []
+        //         },
+        //         "msgs": [
+        //             {
+        //                 "value": {
+        //
+        //                 },
+        //                 "type": "thorchain/MsgDeposit"
+        //             }
+        //         ],
+        //         "memo": "s:ETH.ETH:0x141D9959cAe3853b035000490C03991eB70Fc4aC:854399:ss:30",
+        //         "sequence": "1"
+        //     },
+        //     "signerAddress": "thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx"
+        // }
 
         //Unsigned TX
         let msg = {
@@ -44,35 +67,24 @@ let run_test = async function () {
             "tx":{
                 "msg":[
                     {
-                        "inputs": [
-                            {
-                                "address": "bnb1afwh46v6nn30nkmugw5swdmsyjmlxslgjfugre",
-                                "coins": [
-                                    {
-                                        "amount": 1000,
-                                        "denom": "BNB"
-                                    }
-                                ]
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "address": "bnb1v7wds8atg9pxss86vq5qjuz38wqsadq7e5m2rr",
-                                "coins": [
-                                    {
-                                        "amount": 1000,
-                                        "denom": "BNB"
-                                    }
-                                ]
-                            }
-                        ]
+                        "type": "thorchain/MsgSend",
+                        "value": {
+                            "amount":
+                                [{
+                                    "amount": "100",
+                                    "denom": "rune"
+                                }]
+                            ,
+                            "from_address": address,
+                            "to_address": "thor1wy58774wagy4hkljz9mchhqtgk949zdwwe80d5"
+                        }
                     }
                 ],
                 "fee":{
                     "gas":"0",
                     "amount":[
                         {
-                            "denom":"uatom",
+                            "denom":"urune",
                             "amount":"1000"
                         }
                     ]
@@ -83,17 +95,16 @@ let run_test = async function () {
                 "memo":"1234"
             },
             "sequence":"8",
-            accountNumber:""
+            account_number:"12"
         }
-
+        console.log("msg.tx.msgs: ",msg.tx.msgs)
         let input = {
             signDoc: {
-                "account_number": "471113",
-                "chain_id": "Binance-Chain-Tigris",
+                "chain_id":"thorchain",
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
-                "source": "0",
                 sequence: msg.sequence,
+                account_number:"12",
                 fee: {
                     "amount": [
                         {
@@ -106,9 +117,9 @@ let run_test = async function () {
             },
             signerAddress: address,
         }
-        console.log("input: ",input)
-        console.log("input: ",JSON.stringify(input))
-        let responseSign = await sdk.bnb.bnbSignTransaction(input)
+        console.log("input import: ",input)
+        let responseSign = await sdk.thorchain.thorchainSignAminoTransfer(input)
+        //let responseSign = await sdk.cosmos.cosmosSignAminoRedelegate(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

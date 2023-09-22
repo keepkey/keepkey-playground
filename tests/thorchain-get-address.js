@@ -27,16 +27,13 @@ let run_test = async function () {
         //Unsigned TX
         let addressInfo = {
             addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
-            showDisplay: false
         }
 
         //push tx to api
         // console.log(kk.instance.SignTransaction())
         let timeStart = new Date().getTime()
         console.log(sdk.address)
-        let response = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let response = await sdk.address.thorchainGetAddress({ address_n: addressInfo.addressNList })
         console.log("response: ", response)
         let timeEnd = new Date().getTime()
         console.log("duration: ", (timeStart - timeEnd) / 1000)

@@ -24,13 +24,46 @@ let run_test = async function () {
         //Unsigned TX
         let addressInfo = {
             addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Binance',
-            scriptType: 'binance',
+            coin: 'Cosmos',
+            scriptType: 'cosmos',
             showDisplay: false
         }
+
         //get address
-        let {address} = await sdk.address.binanceGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
+        //msg
+        //
+        let raw = {
+            "signDoc": {
+                "fee": {
+                    "gas": "0",
+                    "amount": []
+                },
+                "msgs": [
+                    {
+                        "value": {
+                            "amount": [
+                                {
+                                    "amount": "2503274",
+                                    "denom": "uatom"
+                                },
+                            ],
+                            "from_address": "cosmos1rs7fckgznkaxs4sq02pexwjgar43p5wn7akqnc",
+                            "to_address": "cosmos16azur03a4k2qttwk4hpsujuz6x6q547w4hnnpu"
+                        },
+                        "type": "cosmos-sdk/MsgSend"
+                    }
+                ],
+                "memo": "s:ETH.ETH:0x141D9959cAe3853b035000490C03991eB70Fc4aC:961587:ss:30",
+                "sequence": "12",
+                "chain_id": "cosmoshub-4",
+                "account_number": "1563453"
+            },
+            "signerAddress": "cosmos1rs7fckgznkaxs4sq02pexwjgar43p5wn7akqnc"
+        }
+
+        //
 
         //Unsigned TX
         let msg = {
@@ -44,28 +77,7 @@ let run_test = async function () {
             "tx":{
                 "msg":[
                     {
-                        "inputs": [
-                            {
-                                "address": "bnb1afwh46v6nn30nkmugw5swdmsyjmlxslgjfugre",
-                                "coins": [
-                                    {
-                                        "amount": 1000,
-                                        "denom": "BNB"
-                                    }
-                                ]
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "address": "bnb1v7wds8atg9pxss86vq5qjuz38wqsadq7e5m2rr",
-                                "coins": [
-                                    {
-                                        "amount": 1000,
-                                        "denom": "BNB"
-                                    }
-                                ]
-                            }
-                        ]
+
                     }
                 ],
                 "fee":{
@@ -88,11 +100,12 @@ let run_test = async function () {
 
         let input = {
             signDoc: {
-                "account_number": "471113",
-                "chain_id": "Binance-Chain-Tigris",
+                // "accountNumber":"574492",
+                // "chainId":"cosmoshub-4",
+                "account_number":"95421",
+                "chain_id":"cosmoshub-4",
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
-                "source": "0",
                 sequence: msg.sequence,
                 fee: {
                     "amount": [
@@ -107,8 +120,8 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        console.log("input: ",JSON.stringify(input))
-        let responseSign = await sdk.bnb.bnbSignTransaction(input)
+        let responseSign = await sdk.cosmos.cosmosSignAmino(input)
+        //let responseSign = await sdk.cosmos.cosmosSignAminoRedelegate(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {
         // console.error(e)

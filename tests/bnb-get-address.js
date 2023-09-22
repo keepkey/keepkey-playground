@@ -16,12 +16,10 @@ let run_test = async function () {
                 url:"http://localhost:1646"
             }
         }
+
         //init
         const sdk = await KeepKeySdk.create(config)
         console.log("newKey: ",config.apiKey)
-
-        // console.log(sdk.eth)
-        // console.log(sdk.address)
 
 
         //Unsigned TX

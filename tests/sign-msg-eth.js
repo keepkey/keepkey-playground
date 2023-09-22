@@ -19,13 +19,26 @@ let run_test = async function () {
         console.log("newKey: ",config.apiKey)
 
         //get eth address
+        let addressInfo = {
+            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
+            coin: 'Ethereum',
+            scriptType: 'ethereum',
+            showDisplay: false
+        }
 
+        //push tx to api
+        // console.log(kk.instance.SignTransaction())
+        let timeStart = new Date().getTime()
+        console.log(sdk.address)
+        let response = await sdk.address.ethereumGetAddress({ address_n: addressInfo.addressNList })
+        console.log("response: ", response)
 
         let input = {
-            "address":"0x2356A15042F98f0a53784F42237bd4b2873AADCF",
-            message:"foobar"
+            "address":response.address,
+            message:"0x0123"
         }
         console.log("input: ",input)
+        console.log("")
         let responseSign = await sdk.eth.ethSign(input)
         console.log(responseSign)
     } catch (e) {

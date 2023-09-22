@@ -1,6 +1,5 @@
 
 const SDK = require("@keepkey/keepkey-sdk")
-const {KeepKeySdk} = require("@keepkey/keepkey-sdk");
 
 
 let spec = 'http://localhost:1646/spec/swagger.json'
@@ -17,18 +16,19 @@ let run_test = async function () {
             }
         }
         //init
-        const sdk = await KeepKeySdk.create(config)
-        console.log("newKey: ",config.apiKey)
+        const sdk = await SDK.KeepKeySdk.create(config)
+        //handle no bridge
 
-        // console.log(sdk.eth)
-        // console.log(sdk.address)
+        console.log(config.apiKey)
+        // console.log(sdk)
+        // console.log(sdk.bitcoinGetAddress)
 
 
         //Unsigned TX
         let addressInfo = {
-            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-            coin: 'Cosmos',
-            scriptType: 'cosmos',
+            addressNList: [2147483732, 2147483648, 2147483648, 0, 0],
+            coin: 'Litecoin',
+            scriptType: 'p2wpkh',
             showDisplay: false
         }
 
@@ -36,10 +36,17 @@ let run_test = async function () {
         // console.log(kk.instance.SignTransaction())
         let timeStart = new Date().getTime()
         console.log(sdk.address)
-        let response = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let response = await sdk.address.utxoGetAddress({
+            address_n: addressInfo.addressNList,
+            script_type:addressInfo.scriptType,
+            coin:addressInfo.coin
+        })
         console.log("response: ", response)
         let timeEnd = new Date().getTime()
         console.log("duration: ", (timeStart - timeEnd) / 1000)
+
+        // let responseSign = await kk.instance.GetPublicKeys(null, { paths })
+        // console.log("responseSign: ", responseSign.data)
 
     } catch (e) {
         console.error(e)

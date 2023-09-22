@@ -1,0 +1,60 @@
+
+const {KeepKeySdk} = require("@keepkey/keepkey-sdk");
+
+let spec = 'http://localhost:1646/spec/swagger.json'
+
+let run_test = async function () {
+    try {
+        let config = {
+            apiKey: process.env['SERVICE_KEY'] || '1fa0c776-eaa9-499d-a2e5-f76af6073912',
+            pairingInfo:{
+                name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
+                imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
+                basePath:spec,
+                url:"http://localhost:1646"
+            }
+        }
+        //init
+        const sdk = await KeepKeySdk.create(config)
+        console.log("newKey: ",config.apiKey)
+        let addressInfo = {
+            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
+            coin: 'Ethereum',
+            scriptType: 'ethereum',
+            showDisplay: false
+        }
+        let address = await sdk.address.ethereumGetAddress({ address_n: addressInfo.addressNList })
+        console.log(address)
+        //Unsigned TX
+        let unsignedTx = {
+            "addressNList": [
+                2147483692,
+                2147483708,
+                2147483648,
+                0,
+                0
+            ],
+            "from": address.address,
+            "chainId": 137,
+            "nonce": "0x1",
+            "value": "0x0",
+            "data": "0x11b804ab00000000000000000000000031787f747d98a24fabdac09b1d0a23f91b972d91000000000000000000000000000000000000000000000000000000000000006034353738383931300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000284e1591634000000000000000000000000098c926e561c5d4ac2113615a1c3589f85a6d9b70000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001c00000000000000000000000000000000000000000000000000000000000000220000000000000000000000000098c926e561c5d4ac2113615a1c3589f85a6d9b7000000000000000000000000098c926e561c5d4ac2113615a1c3589f85a6d9b7000000000000000000000000000000000000000000000000000000000000025800000000000000000000000000000000000000000000000000000000000001f40000000000000000000000001a8f4f7eb2134e8ad141a761af528b74640712ec000000000000000000000000000000000000000000000000000000000000000a504f4e5a49564552534f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a504f4e5a49564552534f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000037697066733a2f2f516d556f457151787a464233727567314a4a53484c4b784176704643784868444465677232787644464c6a4d7a742f300000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000c82bbe41f2cf04e3a8efa18f7032bdd7f6d98a8100000000000000000000000086c80a8aa58e0a4fa09a69624c31ab2a6cad56b800000000000000000000000000000000000000000000000000000000",
+            "gasLimit": "0xef6e9",
+            "to": "0x5dbc7b840baa9dabcbe9d2492e45d7244b54a2a0",
+            "gasPrice": "0x3f41003",
+            "maxFeePerGas": "0x0",
+            "maxPriorityFeePerGas": "0x3f41003"
+        }
+
+
+        //push tx to api
+        // console.log(kk.instance.SignTransaction())
+        let responseSign = await sdk.eth.ethSignTransaction(unsignedTx)
+        console.log("responseSign: ", responseSign)
+
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+run_test()
