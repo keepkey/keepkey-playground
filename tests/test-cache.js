@@ -1,9 +1,7 @@
-
-const { getKeepKeySDK } = require("@keepkey/keepkey-sdk")
-const SDK = require("@keepkey/keepkey-sdk");
+const { KeepKeySdk } = require("@keepkey/keepkey-sdk")
 
 let spec = 'http://localhost:1646/spec/swagger.json'
-let ASSET = 'ETH'
+
 let run_test = async function () {
     try {
         let config = {
@@ -16,13 +14,22 @@ let run_test = async function () {
             }
         }
         //init
-        const sdk = await SDK.KeepKeySdk.create(config)
-        console.log(config.apiKey)
+        const sdk = await KeepKeySdk.create(config)
 
-        let user = await sdk.system.info.getFeatures()
-        console.log(user)
+        let responseSign = await sdk.storage.getBar()
+        console.log("responseSign: ", responseSign.data)
+
+
     } catch (e) {
         console.error(e)
+        console.log("e: ", Object.keys(e))
+        console.log("e: ", e.response)
+        console.log("e: ", Object.keys(e.name.toString()))
+        console.log("e: ", Object.keys(e.response.toString()))
+        // console.log("e: ", e.response)
+
+        console.log("e: ", e.response.toString())
     }
 }
+
 run_test()

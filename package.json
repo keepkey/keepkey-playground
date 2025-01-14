@@ -2,7 +2,7 @@
   "name": "keepkey-playground",
   "version": "1.0.0",
   "dependencies": {
-    "@keepkey/keepkey-sdk": "^0.2.51",
+    "@keepkey/keepkey-sdk": "0.2.56",
     "dotenv": "^16.0.3",
     "node-fetch": "^3.3.0"
   }

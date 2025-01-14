@@ -107,6 +107,18 @@ let run_test = async function () {
         let responseSign = await sdk.eth.ethSignTypedData(input)
         console.log("responseSign: ", responseSign)
 
+        let tx = {
+            "addressNList":[
+                2147483692,
+                2147483708,
+                2147483648,
+                0,
+                0
+            ],
+            address,
+            data:""
+        }
+
 
     } catch (e) {
         console.error(e)

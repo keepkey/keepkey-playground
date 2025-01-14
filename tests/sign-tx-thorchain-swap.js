@@ -7,7 +7,7 @@ let run_test = async function () {
     try {
 
         let config = {
-            apiKey: process.env['SERVICE_KEY'] || '1fa0c776-eaa9-499d-a2e5-f76af6073912',
+            apiKey: process.env['SERVICE_KEY'] || 'a0511aea-9fb7-4e68-a41c-636f1f97ce0d',
             pairingInfo:{
                 name: process.env['SERVICE_NAME'] || 'KeepKey SDK Demo App',
                 imageUrl: process.env['SERVICE_IMAGE_URL'] || 'https://github.com/BitHighlander/keepkey-desktop/raw/master/electron/icon.png',
@@ -30,11 +30,10 @@ let run_test = async function () {
         }
 
         //get address
-        let {address} = await sdk.address.cosmosGetAddress({ address_n: addressInfo.addressNList })
+        let {address} = await sdk.address.thorchainGetAddress({ address_n: addressInfo.addressNList })
         console.log("address: ", address)
         //msg
 
-        //
           let msg = {
               "addressNList": [
                   2147483692,
@@ -81,7 +80,7 @@ let run_test = async function () {
                 // "accountNumber":"574492",
                 // "chainId":"cosmoshub-4",
                 "account_number":"95421",
-                "chain_id":"cosmoshub-4",
+                "chain_id":"thorchain-mainnet-v1",
                 msgs: msg.tx.msg,
                 memo: msg.tx.memo ?? '',
                 sequence: msg.sequence,
@@ -89,7 +88,7 @@ let run_test = async function () {
                     "amount": [
                         {
                             "amount": "2500",
-                            "denom": "uatom"
+                            "denom": "rune"
                         }
                     ],
                     "gas": "250000"
@@ -98,7 +97,39 @@ let run_test = async function () {
             signerAddress: address,
         }
         console.log("input: ",input)
-        let responseSign = await sdk.thorchain.thorchainSignAminoDeposit(input)
+        console.log("JSON: ",JSON.stringify(input))
+
+        //broke
+        let inputBroke = {
+            "signerAddress":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx",
+            "signDoc":
+                {
+                    "account_number":"71826",
+                    "chain_id":"thorchain-1",
+                    "fee":{
+                        "gas":"500000000",
+                        "amount":[
+                            {"amount":"0","denom":"rune"}
+                        ]
+                    },
+                    "msgs":[
+                        {
+                            "value":{
+                                "coins":[
+                                        {"asset":"THOR.RUNE","amount":"200000000"}
+                                    ],
+                                    "memo":"=:ETH.ETH:0x141D9959cAe3853b035000490C03991eB70Fc4aC",
+                                    "signer":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx"
+                                },
+                            "type":"thorchain/MsgDeposit"
+                        }
+                    ],
+                    "memo":"=:ETH.ETH:0x141D9959cAe3853b035000490C03991eB70Fc4aC",
+                    "sequence":"59"
+                }
+        }
+
+        let responseSign = await sdk.thorchain.thorchainSignAminoDeposit(inputBroke)
         //let responseSign = await sdk.cosmos.cosmosSignAminoRedelegate(input)
         console.log("responseSign: ",responseSign)
     } catch (e) {

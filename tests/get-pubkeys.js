@@ -87,11 +87,13 @@ let run_test = async function () {
             }
         ]
 
+        let timeStart = new Date().getTime()
         //push tx to api
         // console.log(kk.instance.SignTransaction())
-        let timeStart = new Date().getTime()
-        let responseSign = await sdk.system.info.getPublicKey(paths[7])
-        console.log("responseSign: ", responseSign)
+        for(let i = 0; i < paths.length; i++) {
+            let responseSign = await sdk.system.info.getPublicKey(paths[i])
+            console.log("responseSign: ", responseSign)
+        }
         let timeEnd = new Date().getTime()
         console.log("duration: ",(timeStart - timeEnd) / 1000)
         // let responseSign = await kk.instance.GetPublicKeys(null, { paths })

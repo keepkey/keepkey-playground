@@ -23,7 +23,11 @@ let run_test = async function () {
         // console.log(sdk.eth)
         //Unsigned TX
         let addressInfo = {
-            addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
+            addressNList: [                2147483692,
+                2147484579,
+                2147483648,
+                0,
+                0],
             coin: 'Cosmos',
             scriptType: 'cosmos',
             showDisplay: false
@@ -59,7 +63,7 @@ let run_test = async function () {
         let msg = {
             "addressNList":[
                 2147483692,
-                2147483766,
+                2147484579,
                 2147483648,
                 0,
                 0
@@ -95,7 +99,7 @@ let run_test = async function () {
                 "memo":"1234"
             },
             "sequence":"8",
-            account_number:"12"
+            account_number:"2722"
         }
         console.log("msg.tx.msgs: ",msg.tx.msgs)
         let input = {
@@ -117,7 +121,13 @@ let run_test = async function () {
             },
             signerAddress: address,
         }
+
+        //let broke = {"signerAddress":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx","signDoc":{"account_number":"71826","chain_id":"thorchain-1","fee":{"gas":"500000000","amount":[{"amount":"0","denom":"rune"}]},"msgs":[{"value":{"amount":[{"denom":"rune","amount":"76596"}],"to_address":"thor10t3zmsks33mgf7ajkmzj2elt553ufrxgav90ms","from_address":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx"},"type":"thorchain/MsgSend"}],"memo":" ","sequence":"54"}}
+        //let broke = {"signerAddress":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx","signDoc":{"account_number":"71826","chain_id":"thorchain-1","fee":{"gas":"500000000","amount":[{"amount":"0","denom":"rune"}]},"msgs":[{"value":{"amount":[{"denom":"rune","amount":"765888178"}],"to_address":"thor1sjg2y8rz78d9dscsjenveg3k3jtkuyj46wl5ec","from_address":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx"},"type":"thorchain/MsgSend"}],"memo":" ","sequence":"55"}}
+        //let broke = {"signerAddress":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx","signDoc":{"account_number":"71826","chain_id":"thorchain-1","fee":{"gas":"500000000","amount":[{"amount":"0","denom":"rune"}]},"msgs":[{"value":{"amount":[{"denom":"rune","amount":"691856028"}],"to_address":"thor10t3zmsks33mgf7ajkmzj2elt553ufrxgav90ms","from_address":"thor1g9el7lzjwh9yun2c4jjzhy09j98vkhfxfhgnzx"},"type":"thorchain/MsgSend"}],"memo":" ","sequence":"59"}}
+
         console.log("input import: ",input)
+        console.log("input import: ",JSON.stringify(input))
         let responseSign = await sdk.thorchain.thorchainSignAminoTransfer(input)
         //let responseSign = await sdk.cosmos.cosmosSignAminoRedelegate(input)
         console.log("responseSign: ",responseSign)

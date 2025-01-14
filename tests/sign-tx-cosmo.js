@@ -81,7 +81,7 @@ let run_test = async function () {
             },
             signerAddress: address,
         }
-        console.log("input: ",input)
+        console.log("input: ",JSON.stringify(input))
         let responseSign = await sdk.cosmos.cosmosSignAmino(input)
         console.log(responseSign)
     } catch (e) {
